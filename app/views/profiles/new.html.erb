@@ -1,0 +1,16 @@
+<h1>Novo Perfil</h1>
+
+<%= form_with model: @profile do |f| %>
+  <div>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :github_url %><br>
+    <%= f.text_field :github_url %>
+  </div>
+
+  <br>
+  <%= f.submit "Criar Perfil" %>
+<% end %>

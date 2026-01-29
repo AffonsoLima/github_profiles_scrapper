@@ -1,0 +1,12 @@
+<h1>Perfis</h1>
+
+<%= link_to "Novo Perfil", new_profile_path %>
+
+<ul>
+  <% @profiles.each do |profile| %>
+    <li>
+      <%= link_to profile.name, profile_path(profile) %> —
+      <%= profile.github_username || "Processando..." %>
+    </li>
+  <% end %>
+</ul>

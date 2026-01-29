@@ -1,0 +1,14 @@
+<h1><%= @profile.name %></h1>
+
+<p><strong>GitHub:</strong> <%= @profile.github_url %></p>
+
+<% if @profile.github_username.present? %>
+  <p><strong>Usuário:</strong> <%= @profile.github_username %></p>
+  <p><strong>Followers:</strong> <%= @profile.followers %></p>
+  <p><strong>Stars:</strong> <%= @profile.stars %></p>
+  <p><strong>Localização:</strong> <%= @profile.location %></p>
+
+  <%= image_tag @profile.avatar_url if @profile.avatar_url %>
+<% else %>
+  <p>⏳ Buscando dados do GitHub...</p>
+<% end %>
