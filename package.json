@@ -3,13 +3,16 @@
   "private": true,
   "scripts": {
     "build": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds",
-    "build:watch": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch"
+    "build:watch": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch",
+    "build:css": "sass --load-path=node_modules ./app/assets/stylesheets/application.bootstrap.scss ./app/assets/builds/application.css --no-source-map"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.0",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
-    "esbuild": "^0.20.0"
+    "bootstrap-icons": "^1.11.3",
+    "esbuild": "^0.20.0",
+    "sass": "^1.69.0"
   }
 }

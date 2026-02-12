@@ -1,0 +1,15 @@
+<% back_path = params[:from] == "index" ? profiles_path : profile_path(@profile) %>
+
+<div class="page-container">
+	<div class="page-header">
+		<div>
+			<p class="eyebrow">Atualizar dados</p>
+			<h1>Editar Perfil</h1>
+		</div>
+		<div class="page-header-actions">
+			<%= link_to "Voltar", back_path, class: "btn btn-secondary" %>
+		</div>
+	</div>
+
+	<%= render "form", profile: @profile, submit_label: "Atualizar" %>
+</div>

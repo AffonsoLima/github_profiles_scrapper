@@ -1,16 +1,13 @@
-<h1>Novo Perfil</h1>
+<div class="page-container">
+	<div class="page-header">
+		<div>
+			<p class="eyebrow">Novo monitoramento</p>
+			<h1>Cadastrar Perfil do GitHub</h1>
+		</div>
+		<div class="page-header-actions">
+			<%= link_to "Voltar", profiles_path, class: "btn btn-secondary" %>
+		</div>
+	</div>
 
-<%= form_with model: @profile do |f| %>
-  <div>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-
-  <div>
-    <%= f.label :github_url %><br>
-    <%= f.text_field :github_url %>
-  </div>
-
-  <br>
-  <%= f.submit "Criar Perfil" %>
-<% end %>
+	<%= render "form", profile: @profile, submit_label: "Iniciar coleta" %>
+</div>

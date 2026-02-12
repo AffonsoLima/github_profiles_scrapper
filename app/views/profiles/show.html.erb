@@ -1,14 +1,80 @@
-<h1><%= @profile.name %></h1>
+<div class="page-container profile-show">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Perfil monitorado</p>
+      <h1><%= @profile.name %></h1>
+    </div>
+    <div class="page-header-actions">
+      <%= link_to "Voltar", profiles_path, class: "btn btn-secondary" %>
+      <%= link_to "Editar", edit_profile_path(@profile), class: "btn btn-primary" %>
+    </div>
+  </div>
 
-<p><strong>GitHub:</strong> <%= @profile.github_url %></p>
+  <section class="card detail-card">
+    <dl>
+      <div>
+        <dt>Link</dt>
+        <dd><%= link_to @profile.github_url, @profile.github_url, target: "_blank", rel: "noopener" %></dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd><span class="status-pill status-<%= @profile.scrape_status %>"><%= @profile.scrape_status.titleize %></span></dd>
+      </div>
+      <div>
+        <dt>Última coleta</dt>
+        <dd><%= @profile.last_scraped_at&.strftime("%d/%m/%Y %H:%M") || "—" %></dd>
+      </div>
+    </dl>
 
-<% if @profile.github_username.present? %>
-  <p><strong>Usuário:</strong> <%= @profile.github_username %></p>
-  <p><strong>Followers:</strong> <%= @profile.followers %></p>
-  <p><strong>Stars:</strong> <%= @profile.stars %></p>
-  <p><strong>Localização:</strong> <%= @profile.location %></p>
+    <div class="detail-actions">
+      <%= button_to "Reprocessar dados", reprocess_profile_path(@profile), method: :post, class: "btn btn-primary" %>
+      <%= link_to "Excluir", profile_path(@profile), class: "btn btn-danger", data: { turbo_method: :delete, turbo_confirm: "Deseja remover este perfil?" } %>
+    </div>
+  </section>
 
-  <%= image_tag @profile.avatar_url if @profile.avatar_url %>
-<% else %>
-  <p>⏳ Buscando dados do GitHub...</p>
-<% end %>
+  <% if @profile.github_username.present? %>
+    <section class="card data-card">
+      <h2>Informações coletadas</h2>
+      <div class="data-grid">
+        <div>
+          <p class="label">Usuário</p>
+          <p class="value"><%= @profile.github_username %></p>
+        </div>
+        <div>
+          <p class="label">Followers</p>
+          <p class="value"><%= @profile.followers %></p>
+        </div>
+        <div>
+          <p class="label">Following</p>
+          <p class="value"><%= @profile.following %></p>
+        </div>
+        <div>
+          <p class="label">Stars</p>
+          <p class="value"><%= @profile.stars %></p>
+        </div>
+        <div>
+          <p class="label">Contribuições (12m)</p>
+          <p class="value"><%= @profile.contributions_last_year %></p>
+        </div>
+        <div>
+          <p class="label">Localização</p>
+          <p class="value"><%= @profile.location.presence || "—" %></p>
+        </div>
+        <div class="full-row">
+          <p class="label">Organizações</p>
+          <p class="value"><%= @profile.organizations&.join(", ") || "—" %></p>
+        </div>
+      </div>
+
+      <% if @profile.avatar_url.present? %>
+        <div class="avatar-preview">
+          <%= image_tag @profile.avatar_url, alt: @profile.github_username %>
+        </div>
+      <% end %>
+    </section>
+  <% else %>
+    <section class="card data-card">
+      <p>⏳ Buscando dados do GitHub...</p>
+    </section>
+  <% end %>
+</div>

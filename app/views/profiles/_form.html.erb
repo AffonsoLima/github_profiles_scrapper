@@ -1,0 +1,28 @@
+<div class="card form-card">
+  <% if profile.errors.any? %>
+    <div class="form-errors">
+      <p>Não foi possível salvar:</p>
+      <ul>
+        <% profile.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: profile, html: { class: "profile-form" } do |f| %>
+    <div class="field-group">
+      <%= f.label :name, "Nome para identificar o perfil" %>
+      <%= f.text_field :name, required: true, class: "input-control" %>
+    </div>
+
+    <div class="field-group">
+      <%= f.label :github_url, "URL pública do perfil no GitHub" %>
+      <%= f.url_field :github_url, placeholder: "https://github.com/octocat", required: true, class: "input-control" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit submit_label || "Salvar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

@@ -1,12 +1,81 @@
-<h1>Perfis</h1>
+<div class="page-container profiles-page">
+  <div class="page-header">
+    <h1>Perfis</h1>
+    <%= link_to "Cadastrar novo perfil", new_profile_path, class: "btn btn-primary" %>
+  </div>
 
-<%= link_to "Novo Perfil", new_profile_path %>
+  <section class="card filters-card">
+    <div class="card-heading">
+      <p>Filtrar resultados</p>
+    </div>
+    <%= form_with url: profiles_path, method: :get, local: true, html: { class: "filters-form" } do |f| %>
+      <div class="filters-grid">
+        <div class="field-group">
+          <%= f.label :q, "Buscar por nome ou usuário" %>
+          <%= f.text_field :q, value: params[:q], placeholder: "Affonso" %>
+        </div>
 
-<ul>
-  <% @profiles.each do |profile| %>
-    <li>
-      <%= link_to profile.name, profile_path(profile) %> —
-      <%= profile.github_username || "Processando..." %>
-    </li>
+        <div class="field-group">
+          <%= f.label :status, "Status do scraping" %>
+          <%= f.select :status,
+                options_for_select([["Todos", ""]] + Profile.scrape_statuses.keys.map { |status| [status.titleize, status] }, params[:status]) %>
+        </div>
+
+        <div class="field-group">
+          <%= f.label :per_page, "Itens por página" %>
+          <%= f.number_field :per_page, value: params[:per_page] || Pagy::DEFAULT[:items], min: 1, max: Pagy::DEFAULT[:max_items] || 50 %>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Filtrar", class: "btn btn-primary" %>
+        <% if params[:q].present? || params[:status].present? %>
+          <%= link_to "Limpar", profiles_path, class: "btn btn-link" %>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+
+  <div class="card table-card">
+    <table class="profiles-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Usuário</th>
+          <th>Status</th>
+          <th>Followers</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @profiles.each do |profile| %>
+          <tr>
+            <td><%= link_to profile.name, profile_path(profile) %></td>
+            <td><%= profile.github_username || "—" %></td>
+            <td>
+              <span class="status-pill status-<%= profile.scrape_status %>"><%= profile.scrape_status.titleize %></span>
+            </td>
+            <td><%= profile.followers || "—" %></td>
+            <td class="table-actions">
+              <%= link_to edit_profile_path(profile, from: :index), class: "icon-btn", title: "Editar" do %>
+                <i class="bi bi-pencil"></i>
+              <% end %>
+              <%= link_to profile_path(profile), class: "icon-btn danger", title: "Excluir", data: { turbo_method: :delete, turbo_confirm: "Deseja remover este perfil?" } do %>
+                <i class="bi bi-trash"></i>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <% if defined?(@pagy) %>
+    <div class="pagination-info">
+      <div class="pagy-details"><%= pagy_info(@pagy).html_safe %></div>
+      <% if @pagy.pages > 1 %>
+        <div class="pagy-nav"><%= pagy_nav(@pagy) %></div>
+      <% end %>
+    </div>
   <% end %>
-</ul>
+</div>
